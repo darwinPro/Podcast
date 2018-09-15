@@ -3,8 +3,10 @@
 App de podcast integrada con la API  de AudioBoom con Next.js
 La aplicación es responsive
 
-![Captura de la App](./.redme-static/captura.png)
-![Captura de la App](./.redme-static/captura-small.png)
+![Captura de la App](./redme-static/captura.png)
+![Captura de la App](./redme-static/captura-small.png)
+
+![Ver la aplicacion](https://podcast-xjlzgpsbnm.now.sh)
 
 ## ¿Cómo funciona?
 
