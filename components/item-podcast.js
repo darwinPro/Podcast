@@ -1,11 +1,16 @@
 import React from 'react';
 import Link from 'next/link'
+import slug from '../helpers/slug'
+
 
 const ItemPodcast = props => {
-    const { clip } = props
+    const { clip, onPress } = props
     return (
-        <Link href={`/podcast?id=${clip.id}`} prefetch key={clip.id}>
-            <a className="podcast">
+       
+            <a className="podcast"
+                href={`/${slug(clip.channel.title)}.${clip.channel.id}/${slug(clip.title)}.${clip.id}`}
+                onClick={(event) => onPress(event, clip)}
+            >
                 <img
                     style={{ width: '100%' }}
                     src={clip.urls.image}
@@ -62,7 +67,6 @@ const ItemPodcast = props => {
                     }
                 `}</style>
             </a>
-        </Link>
     );
 
 }

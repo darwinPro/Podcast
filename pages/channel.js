@@ -6,8 +6,13 @@ import ItemPodcast from '../components/item-podcast';
 import ItemSerie from '../components/item-serie';
 import ContainerGrid from '../components/container-grid';
 import Error from './_error'
+import PodcastPlayer from '../components/PodcastPlayer';
 
 class Channel extends Component {
+
+    state = {
+        openPodcast: null
+    }
 
     static async getInitialProps({ query, res }) {
         let idChannel = query.id
@@ -19,8 +24,8 @@ class Channel extends Component {
                 fetch(`https://api.audioboom.com/channels/${idChannel}/audio_clips`)
             ])
 
-            if(reqChannel.status >= 400){
-                res.statusCode= reqChannel.status
+            if (reqChannel.status >= 400) {
+                res.statusCode = reqChannel.status
                 return { channel: null, audioClip: null, series: null, statusCode: reqChannel.status }
             }
 
@@ -39,9 +44,24 @@ class Channel extends Component {
         }
     }
 
+    openPodcast = (event, podcast) => {
+        event.preventDefault()
+        this.setState({
+            openPodcast: podcast
+        })
+    }
+
+    onClose = (event) => {
+        event.preventDefault()
+        this.setState({
+            openPodcast: null
+        })
+    }
+
     render() {
 
         const { channel, audioClip, series, statusCode } = this.props
+        const { openPodcast } = this.state
 
         if (statusCode !== 200) {
             return <Error statusCode={statusCode} />
@@ -60,11 +80,18 @@ class Channel extends Component {
                     ></div>
                 </picture>
 
+                {
+                    openPodcast &&
+                    <div className="modal">
+                        <PodcastPlayer clip={openPodcast} onClose={this.onClose}></PodcastPlayer>
+                    </div>
+                }
+
                 <h1>{channel.title}</h1>
 
                 <ContainerGrid title="Ultimos Podcast">
                     {
-                        audioClip.map((clip) => <ItemPodcast clip={clip} />)
+                        audioClip.map((clip) => <ItemPodcast clip={clip} onPress={this.openPodcast} />)
                     }
                 </ContainerGrid>
 
@@ -81,6 +108,15 @@ class Channel extends Component {
                     .cover{
                         width:100%;
                         height:350px;
+                    }
+                    .modal{
+                        position:fixed;
+                        top:0;
+                        left:0;
+                        right:0;
+                        bottom:0;
+                        z-index:99999;
+                        background:white;
                     }
                 `}</style>
 
